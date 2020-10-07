@@ -25,7 +25,7 @@ include "db\db.php";
   <body>
     <header>
       <div class="container">
-        <img src="logo.png" alt="logo" />
+        <img src="img/logo.png" alt="logo" />
       </div>
     </header>
 
@@ -41,7 +41,7 @@ include "db\db.php";
 
           <?php foreach($songDB as $song) { ?>
             <div class="cd">
-                  <img src="<?php echo $song["poster"]?>" alt="<?php echo $song["title"]. " poster"?>" />
+                  <img src="<?php echo $song["poster"]?>" alt="<?php echo $song["title"]. " Poster"?>" />
                   <h3> <?php echo $song["title"]?> </h3>
                   <span class="author"> <?php echo $song["author"]?> </span>
                   <span class="year"> <?php echo $song["year"]?> </span>
