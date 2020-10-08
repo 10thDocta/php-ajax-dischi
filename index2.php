@@ -14,7 +14,7 @@
 <body>
     <header>
         <div class="container">
-            <img src="logo.png" alt="logo" />
+            <img src="img/logo.png" alt="logo" />
         </div>
     </header>
 
@@ -32,7 +32,7 @@
 
     <!-- TEMPLATE  -->
     <script id="cd-template" type="text/x-handlebars-template">
-            <div class="cd" data-genre={{genre}}>
+        <div class="cd" data-genre={{genre}}>
                 <img src={{poster}} alt="">
                 <h3>{{title}}</h3>
                 <span class="author">{{author}} </span>

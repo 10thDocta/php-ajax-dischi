@@ -2,9 +2,9 @@
 
 const ajaxCall = () => {
   $.ajax({
-    url: "http://localhost:81/php-ajax-dischi/api/api.php",
+    url: "http://localhost/php-ajax-dischi/api/",
     method: "GET",
-    success: function (data, stato) {
+    success: function (data) {
       let dataResponse = data;
       console.log(dataResponse);
 
@@ -25,7 +25,7 @@ const render = (objectCD) => {
 
   $(".cds-container").append(html);
 
-  var genre = objectCD.genre;
+  // var genre = objectCD.genre;
 
   // if (!$("#genre-select option").text().includes(genre)) {
   //   $("#genre-select").append(
