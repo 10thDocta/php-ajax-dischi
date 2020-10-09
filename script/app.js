@@ -16087,21 +16087,19 @@ module.exports = g;
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+/* global require */
 var $ = __webpack_require__(/*! jquery */ "./node_modules/jquery/dist/jquery.js");
 
 var Handlebars = __webpack_require__(/*! handlebars */ "./node_modules/handlebars/dist/cjs/handlebars.js");
+
+var authorArray = [];
 
 var ajaxCall = function ajaxCall() {
   $.ajax({
     url: "http://localhost/php-ajax-dischi/api/",
     method: "GET",
     success: function success(data) {
-      var dataResponse = data;
-      console.log(dataResponse);
-
-      for (var i = 0; i < dataResponse.length; i++) {
-        render(dataResponse[i]);
-      }
+      render(data);
     },
     error: function error(richiesta, stato, errori) {
       alert("E' avvenuto un errore.", errori);
@@ -16112,30 +16110,52 @@ var ajaxCall = function ajaxCall() {
 var render = function render(objectCD) {
   var source = document.getElementById("cd-template").innerHTML;
   var template = Handlebars.compile(source);
-  var html = template(objectCD);
-  $(".cds-container").append(html); // var genre = objectCD.genre;
-  // if (!$("#genre-select option").text().includes(genre)) {
-  //   $("#genre-select").append(
-  //     `<option value="${genre.toLowerCase()}">${genre}</option>`
-  //   );
-  // }
+  objectCD.forEach(function (e) {
+    var html = template(e);
+    $(".cds-container").append(html);
+    console.log(e.author);
+
+    if (!authorArray.includes(e.author)) {
+      selectAuthor(e.author);
+      authorArray.push(e.author);
+    }
+  });
+};
+
+var selectAuthor = function selectAuthor(author) {
+  var source = document.getElementById("select-template").innerHTML;
+  var template = Handlebars.compile(source);
+  var context = {
+    "author": author
+  };
+  var html = template(context);
+  $("#author-select").append(html);
 };
 /* --------------- DOCUMENT READY --------------- */
 
 
-$(document).ready(function () {
+$(function () {
   ajaxCall();
-  $("#genre-select").change(function () {
-    var value = $(this).val();
-    $(".cds-container .cd").filter(function () {
-      if (value == "all") {
-        $(this).show();
-      } else {
-        $(this).toggle($(this).attr("data-genre").toLowerCase().includes(value));
+  $("#author-select").change(function () {
+    var author = $(this).val();
+    $(".cds-container").empty();
+    $.ajax({
+      url: "http://localhost/php-ajax-dischi/api/filter.php",
+      data: {
+        "author": author
+      },
+      method: "GET",
+      success: function success(data) {
+        render(data);
+      },
+      error: function error(richiesta, stato, errori) {
+        alert("E' avvenuto un errore.", stato, errori);
+        console.log(errori);
       }
     });
   });
 });
+console.log("pippo");
 
 /***/ }),
 

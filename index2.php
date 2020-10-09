@@ -17,9 +17,9 @@
     </header>
 
     <div class="select-container container">
-        <h2>Select your genre</h2>
-        <div class="genre-selector">
-            <select name="genre-select" id="genre-select">
+        <h2>Select Author</h2>
+        <div class="author-selector">
+            <select name="author-select" id="author-select">
                 <option value="all">All</option>
             </select>
         </div>
@@ -36,6 +36,11 @@
                 <span class="author">{{author}} </span>
                 <span class="year">{{year}}</span>
             </div>
+          </script>
+
+
+    <script id="select-template" type="text/x-handlebars-template">
+        <option value="{{author}}">{{author}}</option>
           </script>
 
     <script src="script/app.js" charset="utf-8"></script>

@@ -1,17 +1,16 @@
+/* global require */
+
 const $ = require('jquery');
 const Handlebars = require("handlebars");
+const authorArray = [];
+
 
 const ajaxCall = () => {
     $.ajax({
         url: "http://localhost/php-ajax-dischi/api/",
         method: "GET",
         success: function (data) {
-            let dataResponse = data;
-            console.log(dataResponse);
-
-            for (let i = 0; i < dataResponse.length; i++) {
-                render(dataResponse[i]);
-            }
+            render(data);
         },
         error: function (richiesta, stato, errori) {
             alert("E' avvenuto un errore.", errori);
@@ -20,37 +19,68 @@ const ajaxCall = () => {
 };
 
 const render = (objectCD) => {
-    const source = document.getElementById("cd-template").innerHTML;
-    const template = Handlebars.compile(source);
-    const html = template(objectCD);
+    let source = document.getElementById("cd-template").innerHTML;
+    let template = Handlebars.compile(source);
 
-    $(".cds-container").append(html);
 
-    // var genre = objectCD.genre;
+    objectCD.forEach(e => {
 
-    // if (!$("#genre-select option").text().includes(genre)) {
-    //   $("#genre-select").append(
-    //     `<option value="${genre.toLowerCase()}">${genre}</option>`
-    //   );
-    // }
+        let html = template(e);
+        $(".cds-container").append(html);
+
+        console.log(e.author);
+
+        if (!authorArray.includes(e.author)) {
+            selectAuthor(e.author);
+            authorArray.push(e.author);
+        }
+    })
+
 };
+
+const selectAuthor = author => {
+
+    let source = document.getElementById("select-template").innerHTML;
+    let template = Handlebars.compile(source);
+
+    let context = {
+        "author": author
+    }
+
+    let html = template(context);
+
+    $("#author-select").append(html);
+}
 
 
 /* --------------- DOCUMENT READY --------------- */
-$(document).ready(function () {
+$(function () {
     ajaxCall();
 
-    $("#genre-select").change(function () {
-        const value = $(this).val();
+    $("#author-select").change(function () {
 
-        $(".cds-container .cd").filter(function () {
-            if (value == "all") {
-                $(this).show();
-            } else {
-                $(this).toggle(
-                    $(this).attr("data-genre").toLowerCase().includes(value)
-                );
-            }
+        let author = $(this).val();
+
+        $(".cds-container").empty();
+
+        $.ajax({
+            url: "http://localhost/php-ajax-dischi/api/filter.php",
+            data: {
+                "author": author
+            },
+            method: "GET",
+            success: function (data) {
+                render(data);
+            },
+            error: function (richiesta, stato, errori) {
+                alert("E' avvenuto un errore.", stato, errori);
+                console.log(errori);
+            },
         });
+
+
     });
 });
+
+
+console.log("pippo");
